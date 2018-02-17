@@ -20,7 +20,7 @@ Let's start by creating a Cosmos DB instance in the portal, this is a quick proc
 See below:
 ![alt text](https://github.com/shanepeckham/ContainersOnAzure_MiniLab/blob/master/images/CosmosDB.png)
 
-Once the DB is provisioned, we need to get the Database Username and Password, these may be found in the Settings --> Connection Strings section of your DB. We will need these to run our container, so copy them for convenient access. See below:
+Once the DB is provisioned, we need to get the Connection String, this may be found in the Settings --> Connection Strings section of your DB. We will need this to run our function, so copy it for convenient access. See below:
 
 ![alt text](https://github.com/shanepeckham/ContainersOnAzure_MiniLab/blob/master/images/DBKeys.png)
 
