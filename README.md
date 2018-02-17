@@ -17,6 +17,11 @@ In the following command, please substitute your own unique Azure Cosmos DB acco
 ```
 az cosmosdb create --name <cosmosdb-name> --resource-group myResourceGroup --kind MongoDB
 ```
+
+Once the DB is provisioned, we need to get the Connection String, this may be found in the Settings --> Connection Strings section of your DB. We will need this to run our pre-built Golang container, so copy it for convenient access. See below:
+
+![alt text](https://github.com/shanepeckham/ContainersOnAzure_IntroLab/blob/master/images/CosmosConnString.png)
+
 ## Load sample data into a collection in CosmosDB
 
 Data stored by an Azure Cosmos DB is available to view, query, and run business-logic on in the Azure portal. For simplicity we will create a Database, Collection and Documents in the Azure portal.
@@ -52,31 +57,43 @@ In Data Explorer you should now see a Collection called plans, expand it so that
 
 Select Save, CosmosDB will auto generate an Id for the Document. Now we can deploy our code to read this record.
 
-##  Creating a function in OpenFaaS
+##  Deploying a function in OpenFaaS
 
-Create a directory for your function and cd into it using a terminal session.
+In order to deploy our pre-built Golang container we will need values for the following variables:
 
-To create a new OpenFaaS Golang function to query our CosmosDb instance run the following in the FaaS-CLI:
+* OpenFaaS Gateway IP: This is the URL for your deployed OpenFaaS Gateway with AKS, it is the same as your OpenFaaS UI URL without the ui suffix, for example: ```http://127.0.0.1:8080```
 
-```faas-cli new openfaascosmos --lang go```
+* image: For this example we will use our pre-built container which has been pushed to Docker Hub, namely ```shanepeckham/openfaascosmos```
 
-This will create the templates for your function and a stack file called openfaascosmos.yml
+* Name: This is the name of your function, it can be anything
 
-Now if we navigate into the directory we will see our handler file which in this case will be handler.go
+* env: This is an environment variable which we will use to pass our CosmosDB connection string at runtime, we will not store the connection with code, ideally we would use a Kubernetes secret or inject this via Azure Key Vault. This will have the format ```--env=NODE_ENV=[CosmosDB Connection String]```
 
-```cd openfaascosmos && ls```
+We will now use the faas-cli to deploy our pre-built Golang container to our OpenFaaS Gateway. To do so we need to run the following command:
 
-This handler file is where we will place our code for our function which will be placed into a container by the OpenFaaS
+```
+faas-cli deploy -g [OpenFaaS Gateway IP] --image=shanepeckham/openfaascosmos --name=[Your Function Name] --env=NODE_ENV=[CosmosDB Connection String]
+```
+Select enter to deploy your function and you should see your newly created OpenFaaS endpoint for your function:
 
-faas-cli build -f openfaascosmos.yml
+```
+Deployed. 200 OK.
+URL: http://[OpenFaaS Gateway IP}/function/[Your Function Name]
+```
+Now you can test your function using curl:
 
-go get -u github.com/golang/dep/cmd/dep
+```
+curl URL: http://[OpenFaaS Gateway IP}/function/[Your Function Name]
+```
+You should see the following response:
 
-cd $GOPATH/src/functions/[func]
-$ dep init && \
-  dep ensure -add gopkg.in/mgo.v2 && \
-  dep ensure -add gopkg.in/mgo.v2/bson && \
-  ls
-faas-cli build -f cosmos.yml && \
-faas-cli push -f cosmos.yml && \
-  faas-cli deploy -f cosmos.yml
+```
+[{"ID":"87992b20-dcf3-1601-a4fa-908efb515024","Name":"two_person","FriendlyName":"","PortionSize":"","MealsPerWeek":"","Price":72,"Description":"Our basic plan, delivering 3 meals per week, which will feed 1-2 people."}]
+```
+
+We can also test our function within the OpenFaaS UI, see below:
+
+![alt text](https://github.com/shanepeckham/ContainersOnAzure_IntroLab/blob/master/images/OpenFaaSUI.png)
+
+You have now successfully deployed a function to OpenFaaS and queried your plans Database and Collection in Azure CosmosDB!
+
