@@ -1,6 +1,4 @@
-# Deploying a function to OpenFaas
-
-Any container or process in a Docker container can be a serverless function in OpenFaaS. 
+# Deploying a function to OpenFaas 
 
 ## Install the FaaS CLI
 
