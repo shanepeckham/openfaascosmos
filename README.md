@@ -27,12 +27,46 @@ In the top Search box, type Azure Cosmos DB. When your Cosmos DB account blade o
 
 We will create a new Database and Collection, both called 'plans'. In the Data Explorer, select New Collection and enter the following values:
 
+Database Id: plans
+Collection Id: plans
+Storage Capacity: Fixed (10Gb)
+Throughput: 500
+
 ![alt text](https://github.com/shanepeckham/ContainersOnAzure_IntroLab/blob/master/images/NewCollection.png)
 
+Select Ok.
 
-##  Creating a function
+In Data Explorer you should now see a Collection called plans, expand it so that you can see the Documents and select Documents. Select New Document and paste in the following JSON Document:
 
-To create a new OpenFaaS Golang function to query CosmosDb 
+```
+{
+	"name" : "two_person",
+	"friendlyName" : "Two Person Plan",
+	"portionSize" : "1-2 Person",
+	"mealsPerWeek" : "3 Unique meals per week",
+	"price" : 72,
+	"description" : "Our basic plan, delivering 3 meals per week, which will feed 1-2 people.",
+	"__v" : 0
+}
+```
+
+Select Save, CosmosDB will auto generate an Id for the Document. Now we can deploy our code to read this record.
+
+##  Creating a function in OpenFaaS
+
+Create a directory for your function and cd into it using a terminal session.
+
+To create a new OpenFaaS Golang function to query our CosmosDb instance run the following in the FaaS-CLI:
+
+```faas-cli new openfaascosmos --lang go```
+
+This will create the templates for your function and a stack file called openfaascosmos.yml
+
+Now if we navigate into the directory we will see our handler file which in this case will be handler.go
+
+```cd openfaascosmos && ls```
+
+This handler file is where we will place our code for our function which will be placed into a container by the OpenFaaS
 
 faas-cli build -f openfaascosmos.yml
 
