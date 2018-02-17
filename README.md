@@ -30,10 +30,10 @@ In the top Search box, type Azure Cosmos DB. When your Cosmos DB account blade o
 
 We will create a new Database and Collection, both called 'plans'. In the Data Explorer, select New Collection and enter the following values:
 
-Database Id: plans
-Collection Id: plans
-Storage Capacity: Fixed (10Gb)
-Throughput: 500
+* Database Id: plans
+* Collection Id: plans
+* Storage Capacity: Fixed (10Gb)
+* Throughput: 500
 
 ![alt text](https://github.com/shanepeckham/ContainersOnAzure_IntroLab/blob/master/images/NewCollection.png)
 
