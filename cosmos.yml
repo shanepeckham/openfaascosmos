@@ -1,6 +1,6 @@
 provider:
   name: faas
-  gateway: http://52.226.73.206:8080/
+  gateway: {OpenFaaS Gateway IP]/
 
 functions:
   cosmos:
@@ -8,4 +8,4 @@ functions:
     handler: ./cosmos
     image: shanepeckham/openfaascosmos
     environment:
-      NODE_ENV: mongodb://handsonslan:LTd35WzMrsLZbwkA5iv0KscACRc858AlOPzUuQxHWapDsSu5tcG0VizOWqHJ48NC6DW2m7XxBjMzXWbILR06ng==@handsonslan.documents.azure.com:10255/?ssl=true&replicaSet=globaldb
+      NODE_ENV: [CosmosDB Connect String]
