@@ -76,13 +76,11 @@ func Handle(req []byte) string {
 	session.SetSafe(&mgo.Safe{})
 
 	// get collection
-	collection = session.DB("best-for-you-organics").C("plans")
+	collection = session.DB("test").C("plans")
 
 	// Get Document from collection
-	//	result := User{}
-	result := make([]Plan, 0, 10)
+	result := make([]Plan, 0, 1000)
 
-	//err = collection.Find(bson.M{"email": "john.smith@bfyo.com"}).One(&result)
 	err = collection.Find(nil).All(&result)
 	mResult, err := json.Marshal(result)
 
